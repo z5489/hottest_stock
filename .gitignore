@@ -1,0 +1,7 @@
+# Python intermediate files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Screener intermediate outputs
+data/batch_*.json

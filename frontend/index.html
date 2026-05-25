@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADR% Hottest Stock Screener</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-color: #0d0d0d;
+      --surface-color: #141414;
+      --border-color: #1e1e1e;
+      --header-bg: #1a1a1a;
+      --row-hover: #1c1c1c;
+      --row-alt: #111111;
+      --text-primary: #e0e0e0;
+      --text-secondary: #666666;
+      --accent-green: #00c853;
+      --accent-red: #ff1744;
+      --accent-grey: #444444;
+      --accent-blue: #448aff;
+      --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-color);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      padding: 2rem;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1400px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 2px solid var(--border-color);
+      padding-bottom: 1.5rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .title-area h1 {
+      font-size: 1.8rem;
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      background: linear-gradient(45deg, var(--text-primary) 30%, var(--accent-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 0.25rem;
+    }
+
+    .last-run {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    .stats-panel {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 1rem;
+    }
+
+    .stat-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 1rem 1.25rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s, border-color 0.2s;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: #333333;
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+    }
+
+    .stat-card.total { border-left: 3px solid var(--accent-blue); }
+    .stat-card.pass { border-left: 3px solid var(--accent-green); }
+    .stat-card.fail { border-left: 3px solid var(--accent-red); }
+    .stat-card.na { border-left: 3px solid var(--accent-grey); }
+
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      padding: 0.75rem 1.25rem;
+    }
+
+    .btn-group {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    button {
+      background-color: #1a1a1a;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    button:hover {
+      background-color: #262626;
+      border-color: #444;
+    }
+
+    button.active {
+      background-color: var(--accent-green);
+      color: var(--bg-color);
+      border-color: var(--accent-green);
+      font-weight: bold;
+    }
+
+    button.active:hover {
+      background-color: #00e676;
+    }
+
+    .table-container {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border-color);
+      border-radius: 6px;
+      background-color: var(--surface-color);
+      max-height: 600px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      text-align: left;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border-color);
+      white-space: nowrap;
+    }
+
+    th {
+      background-color: var(--header-bg);
+      font-weight: 700;
+      color: var(--text-primary);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      cursor: pointer;
+      user-select: none;
+      transition: background-color 0.2s;
+    }
+
+    th:hover {
+      background-color: var(--row-hover);
+    }
+
+    tr:nth-child(even) td {
+      background-color: var(--row-alt);
+    }
+
+    tr:hover td {
+      background-color: var(--row-hover) !important;
+    }
+
+    .sticky-col {
+      position: sticky;
+      left: 0;
+      background-color: var(--surface-color);
+      z-index: 5;
+      border-right: 1px solid var(--border-color);
+    }
+
+    tr:nth-child(even) td.sticky-col {
+      background-color: var(--row-alt);
+    }
+
+    th.sticky-col {
+      z-index: 11;
+      background-color: var(--header-bg);
+    }
+
+    .text-green { color: var(--accent-green); }
+    .text-red { color: var(--accent-red); }
+    .text-grey { color: var(--text-secondary); }
+
+    .status-badge {
+      display: inline-block;
+      padding: 0.2rem 0.5rem;
+      border-radius: 3px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-align: center;
+      min-width: 50px;
+    }
+
+    .badge-pass {
+      background-color: var(--accent-green);
+      color: var(--bg-color);
+    }
+
+    .badge-fail {
+      background-color: var(--accent-red);
+      color: #ffffff;
+      cursor: help;
+    }
+
+    .badge-na {
+      background-color: #333333;
+      color: #888888;
+    }
+
+    .sort-arrow {
+      color: var(--accent-blue);
+      font-size: 0.75rem;
+    }
+
+    .no-rows-msg {
+      text-align: center;
+      color: var(--text-secondary);
+      padding: 2rem;
+      font-style: italic;
+    }
+
+    .no-data-card {
+      background-color: var(--surface-color);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 4rem 2rem;
+      text-align: center;
+      max-width: 600px;
+      margin: 4rem auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .no-data-card p {
+      color: var(--text-secondary);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .no-data-icon {
+      font-size: 3rem;
+      color: var(--accent-grey);
+    }
+
+    #app-content {
+      display: none;
+    }
+
+    #no-data-view {
+      display: none;
+    }
+
+    .date-selector-area {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.85rem;
+    }
+
+    .date-selector-area label {
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+
+    select {
+      background-color: #1a1a1a;
+      border: 1px solid var(--border-color);
+      color: var(--text-primary);
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      padding: 0.5rem 2rem 0.5rem 0.75rem;
+      border-radius: 4px;
+      cursor: pointer;
+      outline: none;
+      appearance: none;
+      background-image: url("data:image/svg+xml;utf8,<svg fill='white' height='24' viewBox='0 0 24 24' width='24' xmlns='http://www.w3.org/2000/svg'><path d='M7 10l5 5 5-5z'/><path d='M0 0h24v24H0z' fill='none'/></svg>");
+      background-repeat: no-repeat;
+      background-position: right 6px center;
+      background-size: 16px;
+      transition: all 0.2s ease;
+    }
+
+    select:hover {
+      background-color: #262626;
+      border-color: #444;
+    }
+
+    select:focus {
+      border-color: var(--accent-blue);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Main Dashboard View -->
+    <div id="app-content">
+      <header>
+        <div class="title-area">
+          <h1>ADR% Hottest Stock Screener</h1>
+          <div class="last-run" id="last-run-timestamp">Loading...</div>
+        </div>
+        <div class="date-selector-area">
+          <label for="date-select">Run Date: </label>
+          <select id="date-select">
+            <option value="latest">Latest</option>
+          </select>
+        </div>
+      </header>
+
+      <section class="stats-panel">
+        <div class="stat-card total">
+          <div class="stat-label">Total Tickers</div>
+          <div class="stat-value" id="stat-total">-</div>
+        </div>
+        <div class="stat-card pass">
+          <div class="stat-label">PASS</div>
+          <div class="stat-value text-green" id="stat-pass">-</div>
+        </div>
+        <div class="stat-card fail">
+          <div class="stat-label">FAIL</div>
+          <div class="stat-value text-red" id="stat-fail">-</div>
+        </div>
+        <div class="stat-card na">
+          <div class="stat-label">N/A</div>
+          <div class="stat-value text-grey" id="stat-na">-</div>
+        </div>
+      </section>
+
+      <section class="toolbar">
+        <div class="btn-group">
+          <button id="toggle-filter-pass" class="active">Show PASS Only</button>
+          <button id="toggle-filter-all">Show All</button>
+        </div>
+        <div class="btn-group">
+          <button id="btn-export-tickers">Export: Tickers Only</button>
+          <button id="btn-export-all">Export: All Fields</button>
+        </div>
+      </section>
+
+      <section class="table-container">
+        <table>
+          <thead>
+            <tr id="table-headers">
+              <!-- Dynamically populated -->
+            </tr>
+          </thead>
+          <tbody id="table-body">
+            <!-- Dynamically populated -->
+          </tbody>
+        </table>
+      </section>
+    </div>
+
+    <!-- No Data View -->
+    <div id="no-data-view" class="no-data-card">
+      <div class="no-data-icon">⚠</div>
+      <p>No data yet. The screener runs weekdays at 9 PM UTC after market close.</p>
+    </div>
+  </div>
+
+  <script>
+    const state = {
+      results: [],
+      meta: null,
+      showPassOnly: true,
+      sortField: 'relVol',
+      sortAsc: false
+    };
+
+    const columns = [
+      { label: 'Ticker', field: 'ticker' },
+      { label: 'Price', field: 'price' },
+      { label: 'Mkt Cap', field: 'marketCap' },
+      { label: 'Float', field: 'float' },
+      { label: 'Avg Vol 60D', field: 'avgVolume60D' },
+      { label: 'Volume', field: 'volume' },
+      { label: 'Rel Vol', field: 'relVol' },
+      { label: 'Perf 1W', field: 'perf1W' },
+      { label: 'Perf 1M', field: 'perf1M' },
+      { label: 'Perf YTD', field: 'perfYTD' },
+      { label: 'Vol 1W', field: 'volatility1W' },
+      { label: 'ADR% 14D', field: 'adr14' },
+      { label: 'Status', field: 'status' }
+    ];
+
+    function formatAbbreviated(value, isCurrency = false) {
+      if (value === null || value === undefined) return 'N/A';
+      const val = parseFloat(value);
+      if (isNaN(val)) return 'N/A';
+      
+      const prefix = isCurrency ? '$' : '';
+      const absVal = Math.abs(val);
+      let formatted = '';
+      if (absVal >= 1e12) {
+        formatted = (val / 1e12).toFixed(1) + 'T';
+      } else if (absVal >= 1e9) {
+        formatted = (val / 1e9).toFixed(1) + 'B';
+      } else if (absVal >= 1e6) {
+        formatted = (val / 1e6).toFixed(1) + 'M';
+      } else if (absVal >= 1e3) {
+        formatted = (val / 1e3).toFixed(1) + 'K';
+      } else {
+        formatted = val.toString();
+      }
+      formatted = formatted.replace(/\.0([TBMK])/, '$1');
+      return prefix + formatted;
+    }
+
+    function formatPrice(value) {
+      if (value === null || value === undefined) return 'N/A';
+      const val = parseFloat(value);
+      if (isNaN(val)) return 'N/A';
+      return '$' + val.toFixed(2);
+    }
+
+    function formatRelVol(value) {
+      if (value === null || value === undefined) return 'N/A';
+      const val = parseFloat(value);
+      if (isNaN(val)) return 'N/A';
+      return val.toFixed(2) + 'x';
+    }
+
+    function formatPerf(value) {
+      if (value === null || value === undefined) return 'N/A';
+      const val = parseFloat(value);
+      if (isNaN(val)) return 'N/A';
+      const sign = val >= 0 ? '+' : '';
+      const valStr = sign + val.toFixed(1) + '%';
+      const colorClass = val > 0 ? 'text-green' : (val < 0 ? 'text-red' : '');
+      return `<span class="${colorClass}">${valStr}</span>`;
+    }
+
+    function formatPercent(value) {
+      if (value === null || value === undefined) return 'N/A';
+      const val = parseFloat(value);
+      if (isNaN(val)) return 'N/A';
+      return val.toFixed(1) + '%';
+    }
+
+    function sortData() {
+      const field = state.sortField;
+      const asc = state.sortAsc;
+      
+      state.results.sort((a, b) => {
+        let valA = a[field];
+        let valB = b[field];
+        
+        // Put nulls at the end regardless of sort direction
+        if (valA === valB) return 0;
+        if (valA === null || valA === undefined) return 1;
+        if (valB === null || valB === undefined) return -1;
+        
+        if (typeof valA === 'string') {
+          return asc ? valA.localeCompare(valB) : valB.localeCompare(valA);
+        } else {
+          return asc ? valA - valB : valB - valA;
+        }
+      });
+    }
+
+    function renderHeaders() {
+      const tr = document.getElementById('table-headers');
+      tr.innerHTML = '';
+      columns.forEach(col => {
+        const th = document.createElement('th');
+        if (col.field === 'ticker') {
+          th.className = 'sticky-col';
+        }
+        th.textContent = col.label;
+        
+        if (state.sortField === col.field) {
+          const arrow = state.sortAsc ? ' ▲' : ' ▼';
+          th.innerHTML += `<span class="sort-arrow">${arrow}</span>`;
+        }
+        
+        th.addEventListener('click', () => {
+          if (state.sortField === col.field) {
+            state.sortAsc = !state.sortAsc;
+          } else {
+            state.sortField = col.field;
+            state.sortAsc = false;
+          }
+          renderGrid();
+        });
+        tr.appendChild(th);
+      });
+    }
+
+    function renderGrid() {
+      sortData();
+      renderHeaders();
+      
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      
+      const visibleRows = state.results.filter(row => {
+        if (state.showPassOnly) {
+          return row.status === 'PASS';
+        }
+        return true;
+      });
+      
+      if (visibleRows.length === 0) {
+        const tr = document.createElement('tr');
+        const td = document.createElement('td');
+        td.colSpan = columns.length;
+        td.className = 'no-rows-msg';
+        td.textContent = 'No matching stocks found.';
+        tr.appendChild(td);
+        tbody.appendChild(tr);
+        return;
+      }
+      
+      visibleRows.forEach(row => {
+        const tr = document.createElement('tr');
+        
+        columns.forEach(col => {
+          const td = document.createElement('td');
+          if (col.field === 'ticker') {
+            td.className = 'sticky-col';
+            td.style.fontWeight = 'bold';
+          }
+          
+          const val = row[col.field];
+          
+          if (col.field === 'ticker') {
+            td.textContent = val;
+          } else if (col.field === 'price') {
+            td.textContent = formatPrice(val);
+          } else if (col.field === 'marketCap') {
+            td.textContent = formatAbbreviated(val, true);
+          } else if (col.field === 'float' || col.field === 'avgVolume60D' || col.field === 'volume') {
+            td.textContent = formatAbbreviated(val, false);
+          } else if (col.field === 'relVol') {
+            td.textContent = formatRelVol(val);
+          } else if (col.field === 'perf1W' || col.field === 'perf1M' || col.field === 'perfYTD') {
+            td.innerHTML = formatPerf(val);
+          } else if (col.field === 'volatility1W' || col.field === 'adr14') {
+            td.textContent = formatPercent(val);
+          } else if (col.field === 'status') {
+            const badge = document.createElement('span');
+            badge.className = `status-badge badge-${val.toLowerCase().replace('/', '')}`;
+            badge.textContent = val;
+            if (val === 'FAIL' && row.failedCriteria && row.failedCriteria.length > 0) {
+              badge.title = `Failed: ${row.failedCriteria.join(', ')}`;
+            }
+            td.appendChild(badge);
+          }
+          
+          tr.appendChild(td);
+        });
+        
+        tbody.appendChild(tr);
+      });
+    }
+
+    function renderApp() {
+      document.getElementById('no-data-view').style.display = 'none';
+      document.getElementById('app-content').style.display = 'block';
+      
+      if (state.meta) {
+        document.getElementById('last-run-timestamp').textContent = `Last update: ${state.meta.runDate} (${state.meta.runTimestampUTC})`;
+        document.getElementById('stat-total').textContent = state.meta.totalTickers;
+        document.getElementById('stat-pass').textContent = state.meta.passCount;
+        document.getElementById('stat-fail').textContent = state.meta.failCount;
+        document.getElementById('stat-na').textContent = state.meta.naCount;
+      }
+      
+      renderGrid();
+    }
+
+    function renderNoDataState() {
+      document.getElementById('app-content').style.display = 'none';
+      document.getElementById('no-data-view').style.display = 'flex';
+    }
+
+    function downloadCSV(content, filename) {
+      const blob = new Blob([content], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', filename);
+      link.style.visibility = 'hidden';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function exportTickersOnly() {
+      const visibleRows = state.results.filter(row => {
+        if (state.showPassOnly) return row.status === 'PASS';
+        return true;
+      });
+      
+      let csvContent = 'ticker\n';
+      visibleRows.forEach(row => {
+        csvContent += `${row.ticker}\n`;
+      });
+      
+      const dateStr = state.meta ? state.meta.runDate : new Date().toISOString().split('T')[0];
+      downloadCSV(csvContent, `hottest_stocks_tickers_${dateStr}.csv`);
+    }
+
+    function exportAllFields() {
+      const visibleRows = state.results.filter(row => {
+        if (state.showPassOnly) return row.status === 'PASS';
+        return true;
+      });
+      
+      const headers = ['ticker', 'price', 'marketCap', 'float', 'avgVolume60D', 'volume', 'relVol', 'perf1W', 'perf1M', 'perfYTD', 'volatility1W', 'adr14', 'status'];
+      let csvContent = headers.join(',') + '\n';
+      
+      visibleRows.forEach(row => {
+        const line = headers.map(header => {
+          const val = row[header];
+          if (val === null || val === undefined) return '';
+          return val;
+        }).join(',');
+        csvContent += line + '\n';
+      });
+      
+      const dateStr = state.meta ? state.meta.runDate : new Date().toISOString().split('T')[0];
+      downloadCSV(csvContent, `hottest_stocks_full_${dateStr}.csv`);
+    }
+
+    // Set up event listeners
+    document.getElementById('toggle-filter-pass').addEventListener('click', (e) => {
+      state.showPassOnly = true;
+      document.getElementById('toggle-filter-pass').classList.add('active');
+      document.getElementById('toggle-filter-all').classList.remove('active');
+      renderGrid();
+    });
+
+    document.getElementById('toggle-filter-all').addEventListener('click', (e) => {
+      state.showPassOnly = false;
+      document.getElementById('toggle-filter-all').classList.add('active');
+      document.getElementById('toggle-filter-pass').classList.remove('active');
+      renderGrid();
+    });
+
+    async function loadData() {
+      try {
+        const runsResponse = await fetch('./output/runs.json');
+        if (runsResponse.ok) {
+          const runs = await runsResponse.json();
+          populateDateSelector(runs);
+        }
+      } catch (error) {
+        console.warn('Could not load runs list, falling back to latest only:', error);
+      }
+      await fetchRunData('latest');
+    }
+
+    function populateDateSelector(runs) {
+      const select = document.getElementById('date-select');
+      select.innerHTML = '<option value="latest">Latest</option>';
+      runs.forEach(runDate => {
+        const option = document.createElement('option');
+        option.value = runDate;
+        option.textContent = runDate;
+        select.appendChild(option);
+      });
+    }
+
+    async function fetchRunData(date) {
+      let resultsUrl = './output/results.json';
+      let metaUrl = './output/meta.json';
+      
+      if (date !== 'latest') {
+        resultsUrl = `./output/results_${date}.json`;
+        metaUrl = `./output/meta_${date}.json`;
+      }
+      
+      try {
+        const metaResponse = await fetch(metaUrl);
+        if (!metaResponse.ok) throw new Error(`Meta for date ${date} not found`);
+        const meta = await metaResponse.json();
+        
+        const resultsResponse = await fetch(resultsUrl);
+        if (!resultsResponse.ok) throw new Error(`Results for date ${date} not found`);
+        const results = await resultsResponse.json();
+        
+        state.meta = meta;
+        state.results = results;
+        renderApp();
+      } catch (error) {
+        console.error(`Error loading data for date ${date}, falling back to latest:`, error);
+        if (date !== 'latest') {
+          alert(`Data for date ${date} could not be loaded. Falling back to latest.`);
+          document.getElementById('date-select').value = 'latest';
+          await fetchRunData('latest');
+        } else {
+          renderNoDataState();
+        }
+      }
+    }
+
+    document.getElementById('btn-export-tickers').addEventListener('click', exportTickersOnly);
+    document.getElementById('btn-export-all').addEventListener('click', exportAllFields);
+    document.getElementById('date-select').addEventListener('change', (e) => {
+      fetchRunData(e.target.value);
+    });
+
+    // Initial load
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+name: Screener Nightly Run
+
+on:
+  schedule:
+    - cron: '0 21 * * 1-5'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  run-screener:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run fetch_batch.py --batch 0
+        run: python scripts/fetch_batch.py --batch 0
+
+      - name: Run fetch_batch.py --batch 1
+        run: python scripts/fetch_batch.py --batch 1
+
+      - name: Run fetch_batch.py --batch 2
+        run: python scripts/fetch_batch.py --batch 2
+
+      - name: Run fetch_batch.py --batch 3
+        run: python scripts/fetch_batch.py --batch 3
+
+      - name: Run fetch_batch.py --batch 4
+        run: python scripts/fetch_batch.py --batch 4
+
+      - name: Run fetch_batch.py --batch 5
+        run: python scripts/fetch_batch.py --batch 5
+
+      - name: Run fetch_batch.py --batch 6
+        run: python scripts/fetch_batch.py --batch 6
+
+      - name: Run fetch_batch.py --batch 7
+        run: python scripts/fetch_batch.py --batch 7
+
+      - name: Run fetch_batch.py --batch 8
+        run: python scripts/fetch_batch.py --batch 8
+
+      - name: Run merge_results.py
+        run: python scripts/merge_results.py
+
+      - name: Commit and push screener data and output
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/ frontend/output/
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: update screener results [$(date +'%Y-%m-%d')]"
+            git push
+          else
+            echo "No changes in data or output to commit"
+          fi

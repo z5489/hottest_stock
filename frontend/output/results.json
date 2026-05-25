@@ -1,0 +1,318 @@
+[
+  {
+    "ticker": "AAPL",
+    "price": 308.82,
+    "marketCap": 4535749181440.0,
+    "float": 14662387495.0,
+    "avgVolume60D": 44075103.333333336,
+    "volume": 43670223.0,
+    "relVol": 0.990813854019325,
+    "perf1W": 2.861138468359779,
+    "perf1M": 13.047043363759867,
+    "perfYTD": 14.1632186325162,
+    "volatility1W": 0.8312383377250743,
+    "adr14": 1.8597143201200428,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "ADBE",
+    "price": 244.76,
+    "marketCap": 98931990528.0,
+    "float": 402963148.0,
+    "avgVolume60D": 5501185.0,
+    "volume": 3778049.0,
+    "relVol": 0.6867700322748644,
+    "perf1W": -1.1470159639222088,
+    "perf1M": 2.4186119686296452,
+    "perfYTD": -26.564655424209,
+    "volatility1W": 2.4626683549887303,
+    "adr14": 3.2040192061214308,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "AMD",
+    "price": 467.51,
+    "marketCap": 762322092032.0,
+    "float": 1621860620.0,
+    "avgVolume60D": 38154853.333333336,
+    "volume": 34758602.0,
+    "relVol": 0.9109876978516319,
+    "perf1W": 10.235794161133242,
+    "perf1M": 53.11631032839106,
+    "perfYTD": 109.20481819119132,
+    "volatility1W": 4.009777051397866,
+    "adr14": 5.5888491450195,
+    "status": "FAIL",
+    "failedCriteria": [
+      "float",
+      "perf1W"
+    ]
+  },
+  {
+    "ticker": "AMZN",
+    "price": 266.32,
+    "marketCap": 2864833626112.0,
+    "float": 9779933615.0,
+    "avgVolume60D": 45200236.666666664,
+    "volume": 27535526.0,
+    "relVol": 0.6091898633864086,
+    "perf1W": 0.8253170874858757,
+    "perf1M": 4.406462840081276,
+    "perfYTD": 17.58057718508554,
+    "volatility1W": 1.6862189223760167,
+    "adr14": 2.0888680094831193,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "AVGO",
+    "price": 414.14,
+    "marketCap": 1960815624192.0,
+    "float": 4675626872.0,
+    "avgVolume60D": 23781641.666666668,
+    "volume": 14086441.0,
+    "relVol": 0.5923241632113286,
+    "perf1W": -2.5988352805852966,
+    "perf1M": -1.381146773169821,
+    "perfYTD": 19.385760511137228,
+    "volatility1W": 1.437590901470767,
+    "adr14": 3.5863733151679336,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "CSCO",
+    "price": 120.41,
+    "marketCap": 474588151808.0,
+    "float": 3934734226.0,
+    "avgVolume60D": 23088065.0,
+    "volume": 18132424.0,
+    "relVol": 0.7853591888276475,
+    "perf1W": 1.8610985489176761,
+    "perf1M": 35.918284952687245,
+    "perfYTD": 59.20891758297186,
+    "volatility1W": 2.4415301423406257,
+    "adr14": 3.000148805297969,
+    "status": "FAIL",
+    "failedCriteria": [
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "GOOGL",
+    "price": 382.97,
+    "marketCap": 4639851282432.0,
+    "float": 10813651160.0,
+    "avgVolume60D": 28459205.0,
+    "volume": 20442123.0,
+    "relVol": 0.7182956445902126,
+    "perf1W": -3.480517566681924,
+    "perf1M": 13.007165943792693,
+    "perfYTD": 21.60545239719752,
+    "volatility1W": 1.081594663978496,
+    "adr14": 2.328902053104034,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "INTC",
+    "price": 119.84,
+    "marketCap": 602315816960.0,
+    "float": 5016601380.0,
+    "avgVolume60D": 119821728.33333333,
+    "volume": 82663024.0,
+    "relVol": 0.689883422229054,
+    "perf1W": 10.177438665508943,
+    "perf1M": 79.45492442123764,
+    "perfYTD": 204.31689458465087,
+    "volatility1W": 3.237580362787133,
+    "adr14": 7.542927332857993,
+    "status": "FAIL",
+    "failedCriteria": [
+      "float",
+      "perf1W"
+    ]
+  },
+  {
+    "ticker": "META",
+    "price": 610.26,
+    "marketCap": 1549098287104.0,
+    "float": 2192715434.0,
+    "avgVolume60D": 15598348.333333334,
+    "volume": 11688623.0,
+    "relVol": 0.749350043364634,
+    "perf1W": -0.6463329419536497,
+    "perf1M": -7.417130067149317,
+    "perfYTD": -6.092690463906899,
+    "volatility1W": 0.8182529987709422,
+    "adr14": 2.0835367849371558,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "MSFT",
+    "price": 418.57,
+    "marketCap": 3109320130560.0,
+    "float": 7417440621.0,
+    "avgVolume60D": 33764611.666666664,
+    "volume": 22390344.0,
+    "relVol": 0.6631305054251327,
+    "perf1W": -0.5791196392761603,
+    "perf1M": 0.8963536680880689,
+    "perfYTD": -11.102038488287006,
+    "volatility1W": 0.8675957372843397,
+    "adr14": 2.366548971166298,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "NFLX",
+    "price": 88.6,
+    "marketCap": 373076754432.0,
+    "float": 4183388967.0,
+    "avgVolume60D": 42745023.333333336,
+    "volume": 23847195.0,
+    "relVol": 0.5578940690717445,
+    "perf1W": 1.8156767317924034,
+    "perf1M": -4.546435288275958,
+    "perfYTD": -2.6266616614572857,
+    "volatility1W": 1.8022705144287867,
+    "adr14": 2.613271278262301,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "NVDA",
+    "price": 215.33,
+    "marketCap": 5215507972096.0,
+    "float": 23222320000.0,
+    "avgVolume60D": 166733948.33333334,
+    "volume": 169275710.0,
+    "relVol": 1.0152444159817122,
+    "perf1W": -4.433696595255825,
+    "perf1M": 7.85914771056636,
+    "perfYTD": 14.027880532044627,
+    "volatility1W": 1.3034905244258954,
+    "adr14": 3.3957973928814797,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "ORCL",
+    "price": 192.08,
+    "marketCap": 552430927872.0,
+    "float": 1708946533.0,
+    "avgVolume60D": 27356893.333333332,
+    "volume": 9467888.0,
+    "relVol": 0.3460878355095876,
+    "perf1W": -0.4508914905144422,
+    "perf1M": 8.963015181058328,
+    "perfYTD": -1.2516598075278287,
+    "volatility1W": 2.9259164188719065,
+    "adr14": 4.455534424247166,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "PYPL",
+    "price": 44.23,
+    "marketCap": 39015526400.0,
+    "float": 879970798.0,
+    "avgVolume60D": 15642983.333333334,
+    "volume": 10691686.0,
+    "relVol": 0.6834812626321279,
+    "perf1W": -0.40531480701248046,
+    "perf1M": -11.095478307062658,
+    "perfYTD": -23.694676541288523,
+    "volatility1W": 0.8854245975502377,
+    "adr14": 2.567723986483093,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  },
+  {
+    "ticker": "QCOM",
+    "price": 238.16,
+    "marketCap": 251020640256.0,
+    "float": 1051702280.0,
+    "avgVolume60D": 18596341.666666668,
+    "volume": 30375674.0,
+    "relVol": 1.6334220216252209,
+    "perf1W": 18.199412958073204,
+    "perf1M": 77.79769248828991,
+    "perfYTD": 38.564639363869055,
+    "volatility1W": 5.710291555529845,
+    "adr14": 8.356395899024383,
+    "status": "FAIL",
+    "failedCriteria": [
+      "float",
+      "perf1W"
+    ]
+  },
+  {
+    "ticker": "TSLA",
+    "price": 426.01,
+    "marketCap": 1599975981056.0,
+    "float": 2815891530.0,
+    "avgVolume60D": 61989068.333333336,
+    "volume": 46104710.0,
+    "relVol": 0.7437554917276946,
+    "perf1W": 0.8928617891349787,
+    "perf1M": 13.991760776550363,
+    "perfYTD": -2.7529840794756946,
+    "volatility1W": 2.4845121719018937,
+    "adr14": 3.8441120130458883,
+    "status": "FAIL",
+    "failedCriteria": [
+      "perf1M",
+      "float",
+      "volatility1W"
+    ]
+  }
+]

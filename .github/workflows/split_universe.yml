@@ -1,0 +1,37 @@
+name: Split Tickers Universe
+
+on:
+  push:
+    paths:
+      - 'universe.csv'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  split-universe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run split_batches.py
+        run: python scripts/split_batches.py
+
+      - name: Commit and push batch inputs
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/batch_input_*.csv
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: split universe into batch inputs"
+            git push
+          else
+            echo "No changes to batch inputs"
+          fi
