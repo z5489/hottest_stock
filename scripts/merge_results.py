@@ -22,7 +22,7 @@ def main():
     merged.sort(key=lambda x: x.get("ticker", "").upper())
     
     # Ensure frontend output directory exists
-    output_dir = os.path.join("frontend", "output")
+    output_dir = os.path.join("frontend", "public", "output")
     os.makedirs(output_dir, exist_ok=True)
     
     # Write latest results

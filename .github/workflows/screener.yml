@@ -60,7 +60,7 @@ jobs:
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/ frontend/output/
+          git add data/ frontend/public/output/
           if ! git diff --cached --quiet; then
             git commit -m "chore: update screener results [$(date +'%Y-%m-%d')]"
             git push

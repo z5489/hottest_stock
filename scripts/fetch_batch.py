@@ -161,6 +161,7 @@ def main():
                     
             marketCap = clean_val(info.get("marketCap"))
             float_shares = clean_val(info.get("floatShares"))
+            name = info.get("longName") or info.get("shortName") or symbol
             
             volume = clean_val(info.get("regularMarketVolume"))
             if volume is None and not history.empty:
@@ -233,6 +234,7 @@ def main():
             
             results.append({
                 "ticker": symbol,
+                "name": name,
                 "price": price,
                 "marketCap": marketCap,
                 "float": float_shares,
@@ -251,6 +253,7 @@ def main():
             # Failed to fetch data, store nulls and status "N/A"
             results.append({
                 "ticker": symbol,
+                "name": symbol,
                 "price": None,
                 "marketCap": None,
                 "float": None,
