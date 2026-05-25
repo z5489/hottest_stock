@@ -1,9 +1,6 @@
 name: Split Tickers Universe
 
 on:
-  push:
-    paths:
-      - 'universe.csv'
   workflow_dispatch:
 
 permissions:
